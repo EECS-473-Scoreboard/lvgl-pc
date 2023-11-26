@@ -3,5 +3,6 @@
     "editor.formatOnSaveMode": "file",
     "clangd.fallbackFlags": [
         "-I${workspaceFolder}",
+        "-I${workspaceFolder}/ui/simulator/inc",
     ],
 }
