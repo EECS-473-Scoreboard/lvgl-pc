@@ -7,6 +7,7 @@
 /*********************
  *      INCLUDES
  *********************/
+#include "common.h"
 #include "main_menu.h"
 
 #include "lvgl/src/hal/lv_hal_tick.h"
@@ -37,6 +38,8 @@ static void hal_init(void);
  *  STATIC VARIABLES
  **********************/
 
+static lv_obj_t *main_menu;
+
 /**********************
  *      MACROS
  **********************/
@@ -57,6 +60,8 @@ static void hal_init(void);
  *      VARIABLES
  **********************/
 
+uint32_t SC_EVENT_WEARABLE;
+
 /**********************
  *  STATIC PROTOTYPES
  **********************/
@@ -75,7 +80,8 @@ int main(int argc, char **argv) {
     /*Initialize the HAL (display, input devices, tick) for LVGL*/
     hal_init();
 
-    main_menu_build(lv_scr_act());
+    main_menu = lv_scr_act();
+    main_menu_build(main_menu);
 
     while (1) {
         /* Periodically call the lv_task handler.
@@ -91,6 +97,26 @@ int main(int argc, char **argv) {
 /**********************
  *   STATIC FUNCTIONS
  **********************/
+
+static void keyboard_cb(struct _lv_indev_drv_t *_, uint8_t code) {
+    if (code != LV_EVENT_KEY) return;
+    uint32_t k = lv_indev_get_key(lv_indev_get_act());
+
+    wearable_event_t event = {0};
+    // simulate two wearables
+    switch (k) {
+    case SDLK_LEFTBRACKET:
+        event.fields.id = 0xDEAD;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_RIGHTBRACKET:
+        event.fields.id = 0xBEEF;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    default:
+        break;
+    }
+}
 
 /**
  * Initialize the Hardware Abstraction Layer (HAL) for the LVGL graphics
@@ -138,6 +164,10 @@ static void hal_init(void) {
     lv_indev_drv_init(&indev_drv_2); /*Basic initialization*/
     indev_drv_2.type = LV_INDEV_TYPE_KEYPAD;
     indev_drv_2.read_cb = sdl_keyboard_read;
+
+    SC_EVENT_WEARABLE = lv_event_register_id();
+    indev_drv_2.feedback_cb = keyboard_cb;
+
     lv_indev_t *kb_indev = lv_indev_drv_register(&indev_drv_2);
     lv_indev_set_group(kb_indev, g);
 
