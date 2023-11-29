@@ -44,6 +44,7 @@ static void hal_init(void);
 static lv_obj_t *main_menu;
 static lv_obj_t *sound_screen;
 static lv_obj_t *score_screen;
+static lv_obj_t *game_screen;
 
 /**********************
  *      MACROS
@@ -84,10 +85,12 @@ int main(int argc, char **argv) {
 
     /*Initialize the HAL (display, input devices, tick) for LVGL*/
     hal_init();
+    game_screen = lv_scr_act();
+    game_screen_build(game_screen);
     //score_screen = lv_scr_act();
     //score_screen_build(score_screen);
-    sound_screen = lv_scr_act();
-    sound_screen_build(sound_screen);
+    //sound_screen = lv_scr_act();
+    //sound_screen_build(sound_screen);
     //main_menu = lv_scr_act();
     //main_menu_build(main_menu);
     //screen transition 
