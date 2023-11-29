@@ -16,7 +16,7 @@ typedef union {
 #define NO_WEARABLE 0
 
 typedef enum : char {
-    VOLLEYBALL,
+    PINGPONG,
     CORNHOLE,
     TENNIS
 } game_t;

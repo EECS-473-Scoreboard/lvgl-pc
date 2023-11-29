@@ -44,7 +44,7 @@ static void start_btn_pressed(lv_event_t *_) {
         return;
     }
 
-    for (size_t i=0; i < MAX_NAME_LEN; i++) {
+    for (size_t i = 0; i < MAX_NAME_LEN; i++) {
         if (state.p1_name[i] != state.p2_name[i]) {
             // names field populated and different, everything ready
             state.ready_state = MAIN_MENU_GO_GAME;
@@ -150,6 +150,7 @@ void main_menu_build(lv_obj_t *scr) {
     state.wearable_1 = NO_WEARABLE;
     state.wearable_2 = NO_WEARABLE;
     state.ready_state = MAIN_MENU_STAY;
+    state.game = CORNHOLE;
     menu_state = IDLE;
 
     lv_obj_set_style_bg_color(scr, COLOR_GREY, LV_PART_MAIN);
@@ -193,7 +194,7 @@ void main_menu_build(lv_obj_t *scr) {
     lv_label_set_text(p2_pair_lbl, "<NONE>");
     lv_obj_align_to(p2_pair_lbl, p2_pair_btn, LV_ALIGN_BOTTOM_MID, 0, 40);
 
-    lv_obj_t* start_btn = lv_btn_create(scr);
+    lv_obj_t *start_btn = lv_btn_create(scr);
     lv_obj_add_event_cb(start_btn, start_btn_pressed, LV_EVENT_CLICKED, NULL);
     lv_obj_set_width(start_btn, 360);
     lv_obj_set_height(start_btn, 200);
@@ -209,6 +210,6 @@ void main_menu_reset() {
     lv_label_set_text(start_btn_lbl, "START!!!");
 }
 
-main_menu_state_t* main_menu_ready() {
+main_menu_state_t *main_menu_ready() {
     return &state;
 }
