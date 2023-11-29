@@ -9,6 +9,9 @@
  *********************/
 #include "common.h"
 #include "main_menu.h"
+#include "sound_screen.h"
+#include "score_screen.h"
+#include "game_screen.h"
 
 #include "lvgl/src/hal/lv_hal_tick.h"
 #include <stdlib.h>
@@ -39,6 +42,16 @@ static void hal_init(void);
  **********************/
 
 static lv_obj_t *main_menu;
+static lv_obj_t *sound_screen;
+static lv_obj_t *score_screen;
+static lv_obj_t *game_screen;
+
+static enum : char {
+    MAIN_MENU,
+    SOUND_SCR,
+    GAME_SCR,
+    SCORE_SCR
+} current_scr = MAIN_MENU;
 
 /**********************
  *      MACROS
@@ -82,8 +95,35 @@ int main(int argc, char **argv) {
 
     main_menu = lv_scr_act();
     main_menu_build(main_menu);
+    sound_screen = lv_obj_create(NULL);
+    sound_screen_build(sound_screen);
+    score_screen = lv_obj_create(NULL);
+    score_screen_build(score_screen);
+    game_screen = lv_obj_create(NULL);
+    game_screen_build(game_screen);
 
     while (1) {
+        main_menu_state_t* main_menu_state;
+        switch(current_scr) {
+        case MAIN_MENU:
+            main_menu_state = main_menu_ready();
+            if (main_menu_state->ready_state == MAIN_MENU_GO_GAME) {
+                lv_scr_load(game_screen);
+                main_menu_reset(main_menu);
+                main_menu_state->ready_state = MAIN_MENU_STAY;
+                current_scr = GAME_SCR;
+            } else if (main_menu_state->ready_state == MAIN_MENU_GO_SOUND) {
+                lv_scr_load(sound_screen);
+                main_menu_state->ready_state = MAIN_MENU_STAY;
+                current_scr = SOUND_SCR;
+            }
+            break;
+        case SOUND_SCR:
+        case GAME_SCR:
+        case SCORE_SCR:
+            break;
+        }
+
         /* Periodically call the lv_task handler.
          * It could be done in a timer interrupt or an OS task too.*/
         lv_timer_handler();
