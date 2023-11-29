@@ -9,6 +9,9 @@
  *********************/
 #include "common.h"
 #include "main_menu.h"
+#include "sound_screen.h"
+#include "score_screen.h"
+#include "game_screen.h"
 
 #include "lvgl/src/hal/lv_hal_tick.h"
 #include <stdlib.h>
@@ -39,6 +42,8 @@ static void hal_init(void);
  **********************/
 
 static lv_obj_t *main_menu;
+static lv_obj_t *sound_screen;
+static lv_obj_t *score_screen;
 
 /**********************
  *      MACROS
@@ -79,9 +84,14 @@ int main(int argc, char **argv) {
 
     /*Initialize the HAL (display, input devices, tick) for LVGL*/
     hal_init();
-
-    main_menu = lv_scr_act();
-    main_menu_build(main_menu);
+    //score_screen = lv_scr_act();
+    //score_screen_build(score_screen);
+    sound_screen = lv_scr_act();
+    sound_screen_build(sound_screen);
+    //main_menu = lv_scr_act();
+    //main_menu_build(main_menu);
+    //screen transition 
+    //look up how to initialize screen
 
     while (1) {
         /* Periodically call the lv_task handler.
