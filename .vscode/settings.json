@@ -4,5 +4,6 @@
     "clangd.fallbackFlags": [
         "-I${workspaceFolder}",
         "-I${workspaceFolder}/ui/simulator/inc",
+        "-I${workspaceFolder}/game/inc",
     ],
 }
