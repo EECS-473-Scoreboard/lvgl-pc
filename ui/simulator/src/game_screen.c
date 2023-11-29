@@ -8,6 +8,7 @@ static lv_obj_t* BTN_1;
 static lv_obj_t* BTN_2;
 static lv_obj_t* BTN_3;
 static lv_obj_t* BTN_4;
+static lv_obj_t* BTN_5;
 
 
 
@@ -63,30 +64,34 @@ void game_screen_build(lv_obj_t* scr){
     lv_obj_align(p2Score,LV_ALIGN_CENTER,0,-160);
 
     RetBtn = lv_btn_create(scr);
-    lv_obj_align(RetBtn,LV_ALIGN_CENTER,-80,100);
+    lv_obj_align(RetBtn,LV_ALIGN_CENTER,-80,40);
     set_ret_btn_style(RetBtn);
 
     ScoreScreenBtn = lv_btn_create(scr);
-    lv_obj_align(ScoreScreenBtn,LV_ALIGN_CENTER,80,100);
+    lv_obj_align(ScoreScreenBtn,LV_ALIGN_CENTER,80,40);
     set_scor_btn_style(ScoreScreenBtn);
 
 
 
     BTN_1 = lv_btn_create(scr);
-    lv_obj_align(BTN_1,LV_ALIGN_CENTER,0,160);
-    set_act_btn_style(BTN_1,"Button1");
+    lv_obj_align(BTN_1,LV_ALIGN_CENTER,-80,100);
+    set_act_btn_style(BTN_1,"P1+");
 
      BTN_2 = lv_btn_create(scr);
-    lv_obj_align(BTN_2,LV_ALIGN_CENTER,0,220);
-    set_act_btn_style(BTN_2,"Button2");
+    lv_obj_align(BTN_2,LV_ALIGN_CENTER,-80,160);
+    set_act_btn_style(BTN_2,"P1-");
     
      BTN_3 = lv_btn_create(scr);
-    lv_obj_align(BTN_3,LV_ALIGN_CENTER,0,280);
-    set_act_btn_style(BTN_3,"Button3");
+    lv_obj_align(BTN_3,LV_ALIGN_CENTER,80,100);
+    set_act_btn_style(BTN_3,"P2+");
     
-     BTN_4 = lv_btn_create(scr);
-    lv_obj_align(BTN_4,LV_ALIGN_CENTER,0,340);
-    set_act_btn_style(BTN_4,"Button4");
+    BTN_4 = lv_btn_create(scr);
+    lv_obj_align(BTN_4,LV_ALIGN_CENTER,80,160);
+    set_act_btn_style(BTN_4,"P2-");
+
+    BTN_5 = lv_btn_create(scr);
+    lv_obj_align(BTN_5,LV_ALIGN_CENTER,0,220);
+    set_act_btn_style(BTN_5,"Reset");
     
     
 
