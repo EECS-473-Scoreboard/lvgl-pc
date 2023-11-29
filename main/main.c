@@ -8,10 +8,10 @@
  *      INCLUDES
  *********************/
 #include "common.h"
-#include "main_menu.h"
-#include "sound_screen.h"
-#include "score_screen.h"
 #include "game_screen.h"
+#include "main_menu.h"
+#include "score_screen.h"
+#include "sound_screen.h"
 
 #include "lvgl/src/hal/lv_hal_tick.h"
 #include <stdlib.h>
@@ -46,12 +46,7 @@ static lv_obj_t *sound_screen;
 static lv_obj_t *score_screen;
 static lv_obj_t *game_screen;
 
-static enum : char {
-    MAIN_MENU,
-    SOUND_SCR,
-    GAME_SCR,
-    SCORE_SCR
-} current_scr = MAIN_MENU;
+static enum : char { MAIN_MENU, SOUND_SCR, GAME_SCR, SCORE_SCR } current_scr = MAIN_MENU;
 
 /**********************
  *      MACROS
@@ -103,8 +98,8 @@ int main(int argc, char **argv) {
     game_screen_build(game_screen);
 
     while (1) {
-        main_menu_state_t* main_menu_state;
-        switch(current_scr) {
+        main_menu_state_t *main_menu_state;
+        switch (current_scr) {
         case MAIN_MENU:
             main_menu_state = main_menu_ready();
             if (main_menu_state->ready_state == MAIN_MENU_GO_GAME) {
