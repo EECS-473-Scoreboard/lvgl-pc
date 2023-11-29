@@ -57,7 +57,7 @@ inline static void set_ret_btn_style(lv_obj_t *btn) {
     lv_label_set_text(retLabel, "Return");
 }
 
-inline static void set_act_btn_style(lv_obj_t *btn, char name[10]) {
+inline static void set_act_btn_style(lv_obj_t *btn, char *name) {
     lv_obj_set_width(btn, 150);
     lv_obj_set_height(btn, 50);
 

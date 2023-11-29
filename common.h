@@ -15,6 +15,11 @@ typedef union {
 } wearable_event_t;
 #define NO_WEARABLE 0
 
+#define WEARABLE_ACT_0 '2'
+#define WEARABLE_ACT_1 '3'
+#define WEARABLE_ACT_2 '4'
+#define WEARABLE_ACT_3 '5'
+
 typedef enum : char {
     PINGPONG,
     CORNHOLE,

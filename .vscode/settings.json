@@ -6,4 +6,5 @@
         "-I${workspaceFolder}/ui/simulator/inc",
         "-I${workspaceFolder}/game/inc",
     ],
+    "cSpell.enabled": false,
 }

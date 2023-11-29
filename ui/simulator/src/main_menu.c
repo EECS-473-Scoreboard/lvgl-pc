@@ -62,7 +62,10 @@ static void wearable_packet_rcvd(lv_event_t *e) {
     // on the 32-bit target:
     // wearable_event_t event = (wearable_event_t)e->param;
 
-    bool is_first_wearable = e->param == (void *)0xDEAD;
+    wearable_event_t event;
+    event.fields.id = (uintptr_t)(e->param) & 0xFFFF;
+    event.fields.act = ((uintptr_t)(e->param) >> 16) & 0xFFFF;
+    bool is_first_wearable = event.fields.id == 0xDEAD;
 
     switch (menu_state) {
     case IDLE:
@@ -71,13 +74,13 @@ static void wearable_packet_rcvd(lv_event_t *e) {
         lv_label_set_text(lv_obj_get_child(p1_pair_btn, 0), "Pair");
         lv_obj_clear_state(p1_pair_btn, LV_STATE_CHECKED);
         lv_label_set_text(p1_pair_lbl, is_first_wearable ? "0xDEAD" : "0xBEEF");
-        state.wearable_1 = is_first_wearable ? 0xDEAD : 0xBEEF;
+        state.wearable_1 = event.fields.id;
         break;
     case P2_PARING:
         lv_label_set_text(lv_obj_get_child(p2_pair_btn, 0), "Pair");
         lv_obj_clear_state(p2_pair_btn, LV_STATE_CHECKED);
         lv_label_set_text(p2_pair_lbl, is_first_wearable ? "0xDEAD" : "0xBEEF");
-        state.wearable_2 = is_first_wearable ? 0xDEAD : 0xBEEF;
+        state.wearable_2 = event.fields.id;
         break;
     }
 

@@ -12,6 +12,6 @@ typedef struct {
 extern uint32_t SC_EVENT_WEARABLE;
 
 void game_screen_build(lv_obj_t* scr);
-game_screen_state_t* game_screen_ready();
+game_screen_state_t* game_screen_ready(void);
 // tell the game screen game parameters
 void game_screen_init(main_menu_state_t*);

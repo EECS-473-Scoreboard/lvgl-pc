@@ -23,6 +23,6 @@ extern uint32_t SC_EVENT_WEARABLE;
 // main code handles memory for screen
 void main_menu_build(lv_obj_t* scr);
 // main code poll this. If ->ready_state == MAIN_MENU_GO_GAME, get the data
-main_menu_state_t* main_menu_ready();
+main_menu_state_t* main_menu_ready(void);
 // reset main menu to initial state
-void main_menu_reset();
+void main_menu_reset(void);

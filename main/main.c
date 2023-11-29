@@ -153,12 +153,44 @@ static void keyboard_cb(struct _lv_indev_drv_t *_, uint8_t code) {
     wearable_event_t event = {0};
     // simulate two wearables
     switch (k) {
-    case SDLK_LEFTBRACKET:
+    case SDLK_1:
         event.fields.id = 0xDEAD;
+        event.fields.act = WEARABLE_ACT_0;
         lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
-    case SDLK_RIGHTBRACKET:
+    case SDLK_2:
+        event.fields.id = 0xDEAD;
+        event.fields.act = WEARABLE_ACT_1;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_3:
+        event.fields.id = 0xDEAD;
+        event.fields.act = WEARABLE_ACT_2;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_4:
+        event.fields.id = 0xDEAD;
+        event.fields.act = WEARABLE_ACT_3;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_7:
         event.fields.id = 0xBEEF;
+        event.fields.act = WEARABLE_ACT_0;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_8:
+        event.fields.id = 0xBEEF;
+        event.fields.act = WEARABLE_ACT_1;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_9:
+        event.fields.id = 0xBEEF;
+        event.fields.act = WEARABLE_ACT_2;
+        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
+        break;
+    case SDLK_0:
+        event.fields.id = 0xBEEF;
+        event.fields.act = WEARABLE_ACT_3;
         lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     default:
