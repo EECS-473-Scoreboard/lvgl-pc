@@ -27,19 +27,27 @@ static lv_obj_t *p2_textarea;
 static lv_obj_t *p2_pair_btn;
 static lv_obj_t *p2_pair_lbl;
 static lv_obj_t *start_btn_lbl;
+static lv_obj_t *keyboard;
+
+static lv_obj_t *keyboard_target;
+static void textarea_pressed(lv_event_t *e) {
+    keyboard_target = lv_event_get_target(e);
+    lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
+}
 
 static const char *btnm_map[] = {"A",  "B", "C",  "D", "\n", "E",  "F", "G",  "H",  "\n",   "I", "J",
                                  "K",  "L", "\n", "M", "N",  "O",  "P", "\n", "Q",  "R",    "S", "T",
                                  "\n", "U", "V",  "W", "X",  "\n", "Y", "Z",  "<-", "OKAY", ""};
-
-static void event_handler(lv_event_t *e) {
-    lv_event_code_t code = lv_event_get_code(e);
+static void keyboard_cb(lv_event_t *e) {
     lv_obj_t *obj = lv_event_get_target(e);
-    if (code == LV_EVENT_VALUE_CHANGED) {
-        uint32_t id = lv_btnmatrix_get_selected_btn(obj);
-        const char *txt = lv_btnmatrix_get_btn_text(obj, id);
+    uint32_t id = lv_btnmatrix_get_selected_btn(obj);
 
-        LV_LOG_USER("%s was pressed\n", txt);
+    if (id == 26) {
+        lv_textarea_del_char(keyboard_target);
+    } else if (id == 27) {
+        lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
+    } else {
+        lv_textarea_add_text(keyboard_target, lv_btnmatrix_get_btn_text(obj, id));
     }
 }
 
@@ -181,6 +189,7 @@ void main_menu_build(lv_obj_t *scr) {
     lv_obj_align(title, LV_ALIGN_CENTER, 0, -360);
 
     p1_textarea = lv_textarea_create(scr);
+    lv_obj_add_event_cb(p1_textarea, textarea_pressed, LV_EVENT_CLICKED, NULL);
     state.p1_name = lv_textarea_get_text(p1_textarea);
     set_textarea_style(p1_textarea);
     lv_obj_set_pos(p1_textarea, 12, 84);
@@ -197,6 +206,7 @@ void main_menu_build(lv_obj_t *scr) {
     lv_obj_align_to(p1_pair_lbl, p1_pair_btn, LV_ALIGN_BOTTOM_MID, 0, 40);
 
     p2_textarea = lv_textarea_create(scr);
+    lv_obj_add_event_cb(p2_textarea, textarea_pressed, LV_EVENT_CLICKED, NULL);
     state.p2_name = lv_textarea_get_text(p2_textarea);
     set_textarea_style(p2_textarea);
     lv_obj_set_pos(p2_textarea, 12, 186);
@@ -221,13 +231,15 @@ void main_menu_build(lv_obj_t *scr) {
     lv_obj_center(start_btn_lbl);
     lv_label_set_text(start_btn_lbl, "START!!!");
 
-    lv_obj_t *btnm1 = lv_btnmatrix_create(lv_scr_act());
-    lv_btnmatrix_set_map(btnm1, btnm_map);
-    lv_obj_align(btnm1, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_content_width(btnm1, 360);
-    lv_obj_set_content_height(btnm1, 500);
-    lv_obj_align(btnm1, LV_ALIGN_CENTER, 0, 130);
-    lv_obj_add_event_cb(btnm1, event_handler, LV_EVENT_ALL, NULL);
+    keyboard = lv_btnmatrix_create(lv_scr_act());
+    lv_btnmatrix_set_map(keyboard, btnm_map);
+    lv_obj_align(keyboard, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_content_width(keyboard, 360);
+    lv_obj_set_content_height(keyboard, 500);
+    lv_obj_align(keyboard, LV_ALIGN_CENTER, 0, 130);
+    lv_obj_add_event_cb(keyboard, keyboard_cb, LV_EVENT_VALUE_CHANGED, NULL);
+    lv_obj_add_flag(keyboard, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(keyboard, LV_OBJ_FLAG_CLICK_FOCUSABLE);
 }
 
 void main_menu_reset() {
