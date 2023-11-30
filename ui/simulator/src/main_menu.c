@@ -28,6 +28,21 @@ static lv_obj_t *p2_pair_btn;
 static lv_obj_t *p2_pair_lbl;
 static lv_obj_t *start_btn_lbl;
 
+static const char *btnm_map[] = {"A",  "B", "C",  "D", "\n", "E",  "F", "G",  "H",  "\n",   "I", "J",
+                                 "K",  "L", "\n", "M", "N",  "O",  "P", "\n", "Q",  "R",    "S", "T",
+                                 "\n", "U", "V",  "W", "X",  "\n", "Y", "Z",  "<-", "OKAY", ""};
+
+static void event_handler(lv_event_t *e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    lv_obj_t *obj = lv_event_get_target(e);
+    if (code == LV_EVENT_VALUE_CHANGED) {
+        uint32_t id = lv_btnmatrix_get_selected_btn(obj);
+        const char *txt = lv_btnmatrix_get_btn_text(obj, id);
+
+        LV_LOG_USER("%s was pressed\n", txt);
+    }
+}
+
 static void start_btn_pressed(lv_event_t *_) {
     if (menu_state != IDLE) {
         lv_label_set_text(start_btn_lbl, "Still pairing");
@@ -205,6 +220,14 @@ void main_menu_build(lv_obj_t *scr) {
     start_btn_lbl = lv_label_create(start_btn);
     lv_obj_center(start_btn_lbl);
     lv_label_set_text(start_btn_lbl, "START!!!");
+
+    lv_obj_t *btnm1 = lv_btnmatrix_create(lv_scr_act());
+    lv_btnmatrix_set_map(btnm1, btnm_map);
+    lv_obj_align(btnm1, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_content_width(btnm1, 360);
+    lv_obj_set_content_height(btnm1, 500);
+    lv_obj_align(btnm1, LV_ALIGN_CENTER, 0, 130);
+    lv_obj_add_event_cb(btnm1, event_handler, LV_EVENT_ALL, NULL);
 }
 
 void main_menu_reset() {
