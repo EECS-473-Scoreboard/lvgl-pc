@@ -33,7 +33,7 @@ static void render_scores() {
 
         if (overrides[PLAYER_1].right_bitmap == ADVANTAGE_BITMAP_R) {
             p1_chars[1] = 'd';
-        } else if (overrides[PLAYER_1].left_bitmap == CLEAR_BITMAP_R) {
+        } else if (overrides[PLAYER_1].right_bitmap == CLEAR_BITMAP_R) {
             p1_chars[1] = ' ';
         } else {
             p1_chars[1] = '0';
@@ -55,7 +55,7 @@ static void render_scores() {
 
         if (overrides[PLAYER_2].right_bitmap == ADVANTAGE_BITMAP_R) {
             p2_chars[1] = 'd';
-        } else if (overrides[PLAYER_2].left_bitmap == CLEAR_BITMAP_R) {
+        } else if (overrides[PLAYER_2].right_bitmap == CLEAR_BITMAP_R) {
             p2_chars[1] = ' ';
         } else {
             p2_chars[1] = '0';

@@ -1,6 +1,6 @@
-#include "score.h"
 #include "Default.h"
 #include "game_types.h"
+#include "score.h"
 
 static const uint8_t target_scores[] = {7, 11, 21, 99};
 static const uint8_t num_target_scores = sizeof(target_scores) / sizeof(target_scores[0]);
@@ -14,6 +14,10 @@ void Default_button1(player_t player) {
 
     modify_score(player, 1);
     display_score();
+
+    if (get_score(player) >= target_scores[target_score_idx]) {
+        set_winner(player);
+    }
 }
 
 /* decrement score by one*/
@@ -28,8 +32,10 @@ void Default_button2(player_t player) {
 
 /* Change target score */
 void Default_button3(player_t player) {
-    if (target_score_idx >= num_target_scores - 1) target_score_idx = 0;
-    else target_score_idx++;
+    if (target_score_idx >= num_target_scores - 1)
+        target_score_idx = 0;
+    else
+        target_score_idx++;
 
     /* TODO: Play score target change sound effect */
 
@@ -46,5 +52,3 @@ void Default_button3(player_t player) {
 void Default_button4(player_t player) {
     reset_score();
 }
-
-

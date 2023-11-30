@@ -8,7 +8,7 @@ override_t overrides[NUM_PLAYERS];
 
 /* Initialize Score Private Members */
 void init_score() {
-    for (uint8_t i = 0; i < NUM_PLAYERS - 1; i++) {
+    for (uint8_t i = 0; i < NUM_PLAYERS; i++) {
         score[i] = 0;
         overrides[i].overridden = 0;
         overrides[i].left_bitmap = 0;
@@ -58,7 +58,6 @@ void set_score(player_t player, uint8_t val) {
 
 /* Adjust the score */
 void modify_score(player_t player, int delta) {
-    if (player < NUM_PLAYERS) return;
     if (delta * -1 > score[player]) {
         score[player] = 0;
     } else {
@@ -69,15 +68,13 @@ void modify_score(player_t player, int delta) {
 /* Set a player's displayed score with a custom bitmap (ie. for tennis 'Ad') */
 /* The display will remain overridden until cleared */
 void override_display(player_t player, uint8_t ldigit, uint8_t rdigit) {
-    if (player < NUM_PLAYERS) return;
     overrides[player].overridden = 1;
     overrides[player].left_bitmap = ldigit;
-    overrides[player].overridden = rdigit;
+    overrides[player].right_bitmap = rdigit;
 }
 
 /* clear any display override */
 void clear_display(player_t player) {
-    if (player < NUM_PLAYERS) return;
     overrides[player].overridden = 0;
 }
 
