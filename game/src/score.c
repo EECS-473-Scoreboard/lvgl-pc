@@ -81,13 +81,13 @@ void clear_display(player_t player) {
 /* TODO: play the provided win sound effect, notify the UI of completed game, */
 /* update SD card database, 'dance' the display, reset score values */
 void set_winner(player_t player) {
-    for (uint8_t i = 0; i < NUM_PLAYERS - 1; i++)
+    for (uint8_t i = 0; i < NUM_PLAYERS; i++)
         score[i] = 0;
 }
 
 /* TODO: play the provided win sound effect, notify the UI of completed game, */
 /* update SD card database, 'dance' the display */
 void reset_score() {
-    for (uint8_t i = 0; i < NUM_PLAYERS - 1; i++)
+    for (uint8_t i = 0; i < NUM_PLAYERS; i++)
         score[i] = 0;
 }
