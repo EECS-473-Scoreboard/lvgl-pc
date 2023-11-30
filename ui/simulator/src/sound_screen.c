@@ -1,11 +1,21 @@
 #include "sound_screen.h"
 #include "common.h"
 
+static sound_screen_state_t state;
+
 static lv_obj_t *VolumeInc;
 static lv_obj_t *IncText;
 static lv_obj_t *VolumeDec;
 static lv_obj_t *DecText;
 static lv_obj_t *Ret;
+
+static void btn_pressed(lv_event_t *e) {
+    lv_obj_t *btn = lv_event_get_target(e);
+
+    if (btn == Ret) {
+        state.ready_state = SOUND_SCR_GO_MENU;
+    }
+}
 
 inline static void set_textarea_style(lv_obj_t *ta) {
     lv_textarea_set_one_line(ta, true);
@@ -94,4 +104,8 @@ void sound_screen_build(lv_obj_t *scr) {
     Ret = lv_btn_create(scr);
     lv_obj_set_pos(Ret, 50, 600);
     set_ret_btn_style(Ret);
+    lv_obj_add_event_cb(Ret, btn_pressed, LV_EVENT_CLICKED, NULL);
+}
+sound_screen_state_t* sound_screen_ready(void){
+    return &state;
 }

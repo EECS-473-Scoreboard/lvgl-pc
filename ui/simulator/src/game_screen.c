@@ -127,6 +127,9 @@ static void btn_pressed(lv_event_t *e) {
     if (btn == RetBtn) {
         state.ready_state = GAME_SCR_GO_MENU;
     }
+    else if(btn == ScoreScreenBtn){
+        state.ready_state = GAME_SCR_GO_SCORE;
+    }
 }
 
 inline static void set_ret_btn_style(lv_obj_t *btn) {

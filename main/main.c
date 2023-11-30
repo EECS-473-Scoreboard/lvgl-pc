@@ -100,11 +100,14 @@ int main(int argc, char **argv) {
     while (1) {
         main_menu_state_t *main_menu_state;
         game_screen_state_t *game_screen_state;
+        sound_screen_state_t *sound_screen_state;
+        score_screen_state_t *score_screen_state;
         switch (current_scr) {
         case MAIN_MENU:
             main_menu_state = main_menu_ready();
             if (main_menu_state->ready_state == MAIN_MENU_GO_GAME) {
                 game_screen_init(main_menu_state);
+                score_screen_init(main_menu_state);
                 lv_scr_load(game_screen);
                 main_menu_reset();
                 main_menu_state->ready_state = MAIN_MENU_STAY;
@@ -116,6 +119,13 @@ int main(int argc, char **argv) {
             }
             break;
         case SOUND_SCR:
+            sound_screen_state = sound_screen_ready();
+            if(sound_screen_state->ready_state == SOUND_SCR_GO_MENU){
+                lv_scr_load(main_menu);
+                sound_screen_state->ready_state = SOUND_SCR_STAY;
+                current_scr = MAIN_MENU;
+            }
+            break;
         case GAME_SCR:
             game_screen_state = game_screen_ready();
             if (game_screen_state->ready_state == GAME_SCR_GO_MENU) {
@@ -129,6 +139,13 @@ int main(int argc, char **argv) {
             }
             break;
         case SCORE_SCR:
+            score_screen_state = score_screen_ready();
+            //score_screen_state->main_menu_state = main_menu_state;
+            if(score_screen_state->ready_state == SCORE_SCR_GO_GAME){
+                lv_scr_load(game_screen);
+                score_screen_state->ready_state = SCORE_SCR_STAY;
+                current_scr = GAME_SCR;
+            }
             break;
         }
 
