@@ -5,10 +5,28 @@
 #include <stdint.h>
 #include "types.h"
 
+/* Bitmaps for displaying 'Ad' on the 7 segment displays */
+#define ADVANTAGE_BITMAP_L 0x00
+#define ADVANTAGE_BITMAP_R 0x01
+
+/* Bitmaps for displaying '  ' on the 7 segment displays */
+#define CLEAR_BITMAP_L 0x02
+#define CLEAR_BITMAP_R 0x03
+
+typedef struct Override {
+    uint8_t overridden;
+    uint8_t left_bitmap;
+    uint8_t right_bitmap;
+} override_t;
+
+extern override_t overrides[];
+
+void init_score();
+
 /* Print score to 7Seg displays */
 void display_score();
 
-/* Get the current score in ASCII */
+/* Get the current score */
 int get_score(player_t player);
 
 /* Set the score */

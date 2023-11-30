@@ -1,5 +1,7 @@
 #include "game_screen.h"
 #include "common.h"
+#include "score.h"
+#include <stdio.h>
 
 static game_screen_state_t state;
 
@@ -16,6 +18,87 @@ static lv_obj_t *BTN_3;
 static lv_obj_t *BTN_4;
 static lv_obj_t *BTN_5;
 
+static void render_scores() {
+    static char p1_chars[3] = {0};
+    static char p2_chars[3] = {0};
+
+    if (overrides[PLAYER_1].overridden) {
+        if (overrides[PLAYER_1].left_bitmap == ADVANTAGE_BITMAP_L) {
+            p1_chars[0] = 'A';
+        } else if (overrides[PLAYER_1].left_bitmap == CLEAR_BITMAP_L) {
+            p1_chars[0] = ' ';
+        } else {
+            p1_chars[0] = '0';
+        }
+
+        if (overrides[PLAYER_1].right_bitmap == ADVANTAGE_BITMAP_R) {
+            p1_chars[1] = 'd';
+        } else if (overrides[PLAYER_1].left_bitmap == CLEAR_BITMAP_R) {
+            p1_chars[1] = ' ';
+        } else {
+            p1_chars[1] = '0';
+        }
+    } else {
+        int score = get_score(PLAYER_1);
+        p1_chars[0] = '0' + (score / 10);
+        p1_chars[1] = '0' + (score % 10);
+    }
+
+    if (overrides[PLAYER_2].overridden) {
+        if (overrides[PLAYER_2].left_bitmap == ADVANTAGE_BITMAP_L) {
+            p2_chars[0] = 'A';
+        } else if (overrides[PLAYER_2].left_bitmap == CLEAR_BITMAP_L) {
+            p2_chars[0] = ' ';
+        } else {
+            p2_chars[0] = '0';
+        }
+
+        if (overrides[PLAYER_2].right_bitmap == ADVANTAGE_BITMAP_R) {
+            p2_chars[1] = 'd';
+        } else if (overrides[PLAYER_2].left_bitmap == CLEAR_BITMAP_R) {
+            p2_chars[1] = ' ';
+        } else {
+            p2_chars[1] = '0';
+        }
+    } else {
+        int score = get_score(PLAYER_2);
+        p2_chars[0] = '0' + (score / 10);
+        p2_chars[1] = '0' + (score % 10);
+    }
+
+    lv_table_set_cell_value(p1_score_table, 0, 0, p1_chars);
+    lv_table_set_cell_value(p2_score_table, 0, 0, p2_chars);
+}
+
+static void wearable_packet_rcvd(lv_event_t *e) {
+    // on the 32-bit target:
+    // wearable_event_t event = (wearable_event_t)e->param;
+
+    wearable_event_t event;
+    event.fields.id = (uintptr_t)(e->param) & 0xFFFF;
+    event.fields.act = ((uintptr_t)(e->param) >> 16) & 0xFFFF;
+
+    player_t player = event.fields.id == state.main_menu_state->wearable_1 ? PLAYER_1 : PLAYER_2;
+    switch (event.fields.act) {
+    case WEARABLE_ACT_0:
+        state.game->button1(player);
+        break;
+    case WEARABLE_ACT_1:
+        state.game->button2(player);
+        break;
+    case WEARABLE_ACT_2:
+        state.game->button3(player);
+        break;
+    case WEARABLE_ACT_3:
+        state.game->button4(player);
+        break;
+    }
+
+    printf("%d\n", get_score(PLAYER_1));
+
+    render_scores();
+}
+
 void game_screen_init(main_menu_state_t *menu_state) {
     state.main_menu_state = menu_state;
     state.ready_state = GAME_SCR_STAY;
@@ -23,21 +106,22 @@ void game_screen_init(main_menu_state_t *menu_state) {
     switch (menu_state->game) {
     case PINGPONG:
         lv_label_set_text(game_name_lbl, "PING PONG");
+        state.game = &games[2];
         break;
     case CORNHOLE:
         lv_label_set_text(game_name_lbl, "CORNHOLE");
+        state.game = &games[1];
         break;
     case TENNIS:
         lv_label_set_text(game_name_lbl, "TENNIS");
+        state.game = &games[0];
         break;
     }
     lv_label_set_text(p1_name_lbl, menu_state->p1_name);
     lv_label_set_text(p2_name_lbl, menu_state->p2_name);
 
-    // TODO: game init
-
-    lv_table_set_cell_value(p1_score_table, 0, 0, "--");
-    lv_table_set_cell_value(p2_score_table, 0, 0, "--");
+    init_score();
+    render_scores();
 }
 
 static void btn_pressed(lv_event_t *e) {
@@ -76,8 +160,19 @@ inline static void set_scor_btn_style(lv_obj_t *btn) {
     lv_label_set_text(retLabel, "Scores");
 }
 
+static void align_table_cb(lv_event_t *e) {
+    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_draw_part_dsc_t *dsc = lv_event_get_draw_part_dsc(e);
+    if (dsc->part == LV_PART_ITEMS) {
+        dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
+    }
+}
+
 void game_screen_build(lv_obj_t *scr) {
     lv_obj_set_style_bg_color(scr, COLOR_GREY, LV_PART_MAIN);
+
+    lv_obj_add_event_cb(scr, wearable_packet_rcvd, SC_EVENT_WEARABLE, NULL);
+
     game_name_lbl = lv_label_create(scr);
     lv_obj_set_style_text_align(game_name_lbl, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_align(game_name_lbl, LV_ALIGN_CENTER, 0, -360);
@@ -119,6 +214,9 @@ void game_screen_build(lv_obj_t *scr) {
     BTN_5 = lv_btn_create(scr);
     lv_obj_align(BTN_5, LV_ALIGN_CENTER, 0, 220);
     set_act_btn_style(BTN_5, "Reset");
+
+    lv_obj_add_event_cb(p1_score_table, align_table_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
+    lv_obj_add_event_cb(p2_score_table, align_table_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
 
     lv_obj_add_event_cb(RetBtn, btn_pressed, LV_EVENT_CLICKED, NULL);
     lv_obj_add_event_cb(ScoreScreenBtn, btn_pressed, LV_EVENT_CLICKED, NULL);

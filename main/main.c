@@ -150,52 +150,61 @@ static void keyboard_cb(struct _lv_indev_drv_t *_, uint8_t code) {
     if (code != LV_EVENT_KEY) return;
     uint32_t k = lv_indev_get_key(lv_indev_get_act());
 
+    lv_obj_t *target_scr;
+    switch (current_scr) {
+    case MAIN_MENU:
+        target_scr = main_menu;
+        break;
+    case SOUND_SCR:
+        target_scr = sound_screen;
+        break;
+    case GAME_SCR:
+        target_scr = game_screen;
+        break;
+    case SCORE_SCR:
+        target_scr = score_screen;
+        break;
+    }
+
     wearable_event_t event = {0};
     // simulate two wearables
     switch (k) {
     case SDLK_1:
         event.fields.id = 0xDEAD;
         event.fields.act = WEARABLE_ACT_0;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_2:
         event.fields.id = 0xDEAD;
         event.fields.act = WEARABLE_ACT_1;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_3:
         event.fields.id = 0xDEAD;
         event.fields.act = WEARABLE_ACT_2;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_4:
         event.fields.id = 0xDEAD;
         event.fields.act = WEARABLE_ACT_3;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_7:
         event.fields.id = 0xBEEF;
         event.fields.act = WEARABLE_ACT_0;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_8:
         event.fields.id = 0xBEEF;
         event.fields.act = WEARABLE_ACT_1;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_9:
         event.fields.id = 0xBEEF;
         event.fields.act = WEARABLE_ACT_2;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     case SDLK_0:
         event.fields.id = 0xBEEF;
         event.fields.act = WEARABLE_ACT_3;
-        lv_event_send(main_menu, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
         break;
     default:
-        break;
+        return;
     }
+    lv_event_send(target_scr, SC_EVENT_WEARABLE, (void *)(uint64_t)event.bits);
 }
 
 /**

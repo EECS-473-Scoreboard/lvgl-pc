@@ -4,13 +4,7 @@
 
 static uint8_t score[NUM_PLAYERS];
 
-typedef struct Override {
-    uint8_t overridden;
-    uint8_t left_bitmap;
-    uint8_t right_bitmap;
-} override;
-
-static override overrides[NUM_PLAYERS];
+override_t overrides[NUM_PLAYERS];
 
 /* Initialize Score Private Members */
 void init_score() {

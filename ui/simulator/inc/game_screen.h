@@ -2,9 +2,11 @@
 
 #include "common.h"
 #include "main_menu.h"
+#include "game.h"
 
 typedef struct {
     main_menu_state_t* main_menu_state;
+    const game_data_t* game;
     enum : char { GAME_SCR_STAY, GAME_SCR_GO_MENU, GAME_SCR_GO_SCORE } ready_state;
 } game_screen_state_t ;
 
