@@ -1,7 +1,6 @@
 #include "game_screen.h"
 #include "common.h"
 #include "score.h"
-#include <stdio.h>
 
 static game_screen_state_t state;
 
@@ -94,8 +93,6 @@ static void wearable_packet_rcvd(lv_event_t *e) {
         break;
     }
 
-    printf("%d\n", get_score(PLAYER_1));
-
     render_scores();
 }
 
@@ -153,7 +150,6 @@ inline static void set_act_btn_style(lv_obj_t *btn, char *name) {
 inline static void set_scor_btn_style(lv_obj_t *btn) {
     lv_obj_set_width(btn, 150);
     lv_obj_set_height(btn, 50);
-    lv_obj_add_flag(btn, LV_OBJ_FLAG_CHECKABLE);
 
     lv_obj_t *retLabel = lv_label_create(btn);
     lv_obj_center(retLabel);
@@ -161,7 +157,6 @@ inline static void set_scor_btn_style(lv_obj_t *btn) {
 }
 
 static void align_table_cb(lv_event_t *e) {
-    lv_obj_t *obj = lv_event_get_target(e);
     lv_obj_draw_part_dsc_t *dsc = lv_event_get_draw_part_dsc(e);
     if (dsc->part == LV_PART_ITEMS) {
         dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
